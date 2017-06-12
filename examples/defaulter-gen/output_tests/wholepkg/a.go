@@ -38,3 +38,19 @@ type Struct_No_Field_Has_Manual_Defaulter struct {
 	TypeMeta   struct{}
 	OtherField string
 }
+
+// Recursive_Struct_A_With_Manual_Defaulter has recursive types structA and structB
+type Recursive_Struct_A_With_Manual_Defaulter struct {
+	TypeMeta      struct{}
+	ManualDefault ManualDefault
+	OtherField    string
+	structA       *Recursive_Struct_A_With_Manual_Defaulter
+	structB       Recursive_Struct_B_With_Manual_Defaulter
+}
+
+type Recursive_Struct_B_With_Manual_Defaulter struct {
+	TypeMeta      struct{}
+	ManualDefault ManualDefault
+	OtherField    string
+	structA       *Recursive_Struct_A_With_Manual_Defaulter
+}

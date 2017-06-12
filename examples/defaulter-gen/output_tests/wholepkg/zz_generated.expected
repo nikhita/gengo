@@ -28,6 +28,12 @@ import (
 // Public to allow building arbitrary schemes.
 // All generated defaulters are covering - they call all nested defaulters.
 func RegisterDefaults(scheme *runtime.Scheme) error {
+	scheme.AddTypeDefaultingFunc(&Recursive_Struct_A_With_Manual_Defaulter{}, func(obj interface{}) {
+		SetObjectDefaults_Recursive_Struct_A_With_Manual_Defaulter(obj.(*Recursive_Struct_A_With_Manual_Defaulter))
+	})
+	scheme.AddTypeDefaultingFunc(&Recursive_Struct_B_With_Manual_Defaulter{}, func(obj interface{}) {
+		SetObjectDefaults_Recursive_Struct_B_With_Manual_Defaulter(obj.(*Recursive_Struct_B_With_Manual_Defaulter))
+	})
 	scheme.AddTypeDefaultingFunc(&Struct_With_Field_Has_Manual_Defaulter{}, func(obj interface{}) {
 		SetObjectDefaults_Struct_With_Field_Has_Manual_Defaulter(obj.(*Struct_With_Field_Has_Manual_Defaulter))
 	})
@@ -35,6 +41,21 @@ func RegisterDefaults(scheme *runtime.Scheme) error {
 		SetObjectDefaults_Struct_With_Field_With_Field_Has_Manual_Defaulter(obj.(*Struct_With_Field_With_Field_Has_Manual_Defaulter))
 	})
 	return nil
+}
+
+func SetObjectDefaults_Recursive_Struct_A_With_Manual_Defaulter(in *Recursive_Struct_A_With_Manual_Defaulter) {
+	SetDefaults_ManualDefault(&in.ManualDefault)
+	if in.structA != nil {
+		SetObjectDefaults_Recursive_Struct_A_With_Manual_Defaulter(in.structA)
+	}
+	SetObjectDefaults_Recursive_Struct_B_With_Manual_Defaulter(&in.structB)
+}
+
+func SetObjectDefaults_Recursive_Struct_B_With_Manual_Defaulter(in *Recursive_Struct_B_With_Manual_Defaulter) {
+	SetDefaults_ManualDefault(&in.ManualDefault)
+	if in.structA != nil {
+		SetObjectDefaults_Recursive_Struct_A_With_Manual_Defaulter(in.structA)
+	}
 }
 
 func SetObjectDefaults_Struct_With_Field_Has_Manual_Defaulter(in *Struct_With_Field_Has_Manual_Defaulter) {
